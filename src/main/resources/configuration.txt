@@ -1,0 +1,16 @@
+keytool -genkeypair -alias jadassoc -keyalg RSA -keysize 4096 -storetype JKS -keystore C:/jadAllFolders/jdksecurity/jadassoc -validity 3650 -storepass jadassoc
+	Warning:
+	The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore C:/jadAllFolders/jdksecurity/jadassoc -destkeystore C:/jadAllFolders/jdksecurity/jadassoc -deststoretype pkcs12".
+
+	C:\Program Files\PostgreSQL\13\bin>keytool -importkeystore -srckeystore C:/jadAllFolders/jdksecurity/jadassoc -destkeystore C:/jadAllFolders/jdksecurity/jadassoc -deststoretype pkcs12
+	Enter source keystore password:
+	Entry for alias jadassoc successfully imported.
+	Entry for alias meetapplets successfully imported.
+	Import command completed:  2 entries successfully imported, 0 entries failed or cancelled
+
+	Warning:
+	<meetapplets> uses the SHA1withDSA signature algorithm which is considered a security risk. This algorithm will be disabled in a future update.
+	<meetapplets> uses a 1024-bit DSA key which is considered a security risk. This key size will be disabled in a future update.
+	Migrated "C:/jadAllFolders/jdksecurity/jadassoc" to PKCS12. The JKS keystore is backed up as "C:/jadAllFolders/jdksecurity/jadassoc.old".
+
+keytool -list -v -keystore C:/jadAllFolders/jdksecurity/jadassoc

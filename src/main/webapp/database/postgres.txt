@@ -1,0 +1,16 @@
+
+CREATE TABLE users (
+id 			SERIAL NOT NULL,
+firstname 	text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
+lastname 	text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
+loginid 	text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
+password 	text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
+access 		text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
+email 		text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
+failedcount integer NOT NULL DEFAULT 0,
+failedtime 	bigint NOT NULL DEFAULT '0'::bigint,
+createdate 	bigint NOT NULL DEFAULT '0'::bigint,
+goodemail 	character varying(255) COLLATE pg_catalog."default",
+service		text 
+CONSTRAINT users_pkey PRIMARY KEY (id)
+);
