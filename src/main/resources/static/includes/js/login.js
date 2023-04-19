@@ -94,14 +94,16 @@ function checkInputs(wrkId,wrkpsw,wrkvpsw) {
 		alert("must enter a value");
 		return false;
 	}
-	if (wrkvpsw != null) {
-		vpsw = wrkvpsw.value.trim();
-		if (vpsw == null || vpsw.length == 0 || vpsw != psw) {
-			wrkvpsw.focus();
-			if (_CALLER === 'ajaxRestChgPsw')
-				alert("'new password' and 'confirm password' must be the same");
-			else alert("password and verify password must be the same\n");
-			return false;
+	if (typeof wrkvpsw !== 'undefined' ) {
+		if (wrkvpsw != null) {
+			vpsw = wrkvpsw.value.trim();
+			if (vpsw == null || vpsw.length == 0 || vpsw != psw) {
+				wrkvpsw.focus();
+				if (_CALLER === 'ajaxRestChgPsw')
+					alert("'new password' and 'confirm password' must be the same");
+				else alert("password and verify password must be the same\n");
+				return false;
+			}
 		}
 	}
 	let caller = JSON.parse(localStorage.getItem("caller"));

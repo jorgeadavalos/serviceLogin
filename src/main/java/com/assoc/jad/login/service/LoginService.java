@@ -35,17 +35,18 @@ public class LoginService  extends ALogin {
 	@SuppressWarnings("unchecked")
 	public JSONObject confirmCredentials(JSONObject json,HttpServletRequest req) {
 		JSONObject wrkjson = new JSONObject();
+		wrkjson.put("srvcompleted", true);
 		jsonCallerInfo(wrkjson,req);
+		
 		String psw = (String) json.get("password");
 		String loginid = (String) json.get("loginid");
 		String service = (String) wrkjson.get("service");
-		
-		wrkjson.put("srvcompleted", true);
+
 		wrkjson.put("infomsg","login succesful...");
 		wrkjson.put("loginid",loginid);
 		List<Users> users = dao.findByLoginidAndService(loginid,service);
 		if (users.size() == 0) {
-			wrkjson.put("infomsg","'"+loginid+"' does not exist.You need to register.<br/> Please click 'Register' button below");
+			wrkjson.put("infomsg","'"+loginid+"' does not exist for service='"+service+"' .You need to register.<br/> Please click 'Register' button below");
 			wrkjson.put("srvcompleted", false);
 		}
 		if (users.size() > 1) {
@@ -91,9 +92,13 @@ public class LoginService  extends ALogin {
 			return outjson;
 		}
 		List<Users> users = dao.findByLoginidAndService(loginid,service);
+		if (users != null) user = users.get(0);
+		jsonMapper(user,outjson);
 		
 		if (users.size() == 1 && hashPsw.equals(users.get(0).getPassword())) {
-			jsonMapper(user,outjson);
+			outjson.put("srvcompleted", true);
+			outjson.put("infomsg","'"+loginid+"' exist and the password is correct.<br/>");
+			jsonCallerInfo( outjson, req);
 			return outjson;
 		} else if (users.size() != 0) {
 			outjson.put("infomsg","'"+loginid+"' exist. Enter a different loginid.<br/>");
@@ -105,8 +110,6 @@ public class LoginService  extends ALogin {
 		user.setGoodemail("pending confirmation");			//values: yes or no => if no then it is pending verification
 		user.setService((String)outjson.get("service"));
 		user = dao.save(user);
-
-		jsonMapper(user,outjson);
 
 		return outjson;
 	}
@@ -137,12 +140,12 @@ public class LoginService  extends ALogin {
 		String wrkstr = (String)json.get("id");
 		int id = Integer.valueOf(wrkstr);
 		Users user = dao.findById(id);
-		json.put("infomsg","User for"+user.getLoginid()+" updated sucessfully...");
 		if (user == null || user.getGoodemail().equalsIgnoreCase("yes")) {
 			json.put("infomsg","User in database doesnot reflect the required state...");
 			json.put("srvcompleted", false);
 			return json;
 		}
+		json.put("infomsg","User for"+user.getLoginid()+" updated sucessfully...");
 		user.setGoodemail("yes");
 		dao.save(user);
 		json.put("srvcompleted", true);
@@ -326,9 +329,9 @@ public class LoginService  extends ALogin {
 		return json;
 	}
 	private void jsonCallerInfo(JSONObject json,HttpServletRequest req) {
-		String caller = (String)req.getSession().getAttribute("caller");
+		String caller = req.getHeader("caller");
 		if (caller == null) {
-			caller = req.getHeader("caller");
+			caller = (String)req.getSession().getAttribute("caller");
 		}
 		jsonCallerInfo(json, caller);
 	}
